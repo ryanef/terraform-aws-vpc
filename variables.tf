@@ -11,12 +11,12 @@ variable "access_ip" {
 }
 
 variable "az" {
-  default = "us-east-1a"
-  type    = string
+  default = ["us-east-1a", "us-east-1b"]
+  type    = list(string)
 }
 
 variable "azs" {
-  default = null
+  default = ["us-east-1a", "us-east-1b"]
   type    = list(string)
 }
 
@@ -38,12 +38,12 @@ variable "create_db_subnet_group" {
 
 variable "database_subnet_count" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "database_cidr" {
-  type        = string
-  default     = "10.10.3.0/25"
+  type        = list(string)
+  default     = ["10.10.10.0/25", "10.10.11.0/25"]
   description = "Examples using default VPC CIDR: '10.10.3.0/25'. Can use these in a list of strings depending on how you decide to iterate over them."
 }
 
@@ -71,14 +71,14 @@ variable "instance_tenancy" {
 }
 
 variable "public_cidr" {
-  type        = string
-  default     = "10.10.1.0/25"
+  type        = list(string)
+  default     = ["10.10.1.0/25", "10.10.3.0/25"]
   description = "Examples using default VPC CIDR: '10.10.1.0/25'. Can use these in a list of strings depending on how you decide to iterate over them."
 }
 
 variable "private_cidr" {
-  type        = string
-  default     = "10.10.2.0/25"
+  type        = list(string)
+  default     = ["10.10.2.0/25", "10.10.4.0/25"]
   description = "Examples using default VPC CIDR: '10.10.2.0/25'. Can use these in a list of strings depending on how you decide to iterate over them."
 
 }

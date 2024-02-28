@@ -2,14 +2,18 @@ output "vpc_id" {
   value = aws_vpc.this.id
 }
 
+output "azs" {
+  value = [data.aws_availability_zones.available.names]
+}
+
 output "public_subnets" {
-  value = aws_subnet.public_subnet.id
+  value = aws_subnet.public_subnet.*.id
 }
 output "private_subnets" {
-  value = aws_subnet.private_subnet.id
+  value = aws_subnet.private_subnet.*.id
 }
 output "database_subnets" {
-  value = aws_subnet.database_subnet.id
+  value = aws_subnet.database_subnet.*.id
 }
 
 output "database_subnet_group" {
