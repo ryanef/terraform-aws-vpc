@@ -10,15 +10,6 @@ variable "access_ip" {
   type        = list(string)
 }
 
-variable "az" {
-  default = ["us-east-1a", "us-east-1b"]
-  type    = list(string)
-}
-
-variable "azs" {
-  default = ["us-east-1a", "us-east-1b"]
-  type    = list(string)
-}
 
 variable "aws_region" {
   default = "us-east-1"
@@ -90,12 +81,12 @@ variable "public_subnet_ip_on_launch" {
 
 variable "public_subnet_count" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "private_subnet_count" {
   type    = number
-  default = 1
+  default = 2
 }
 
 variable "subnet_group_name" {

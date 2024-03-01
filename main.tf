@@ -11,9 +11,7 @@ resource "aws_vpc" "this" {
   }
 
 }
-locals {
-  az = data.aws_availability_zones.available.names
-}
+
 resource "aws_subnet" "public_subnet" {
   count = var.public_subnet_count
   vpc_id                  = aws_vpc.this.id
