@@ -13,22 +13,29 @@ For routing, there is a public route table that points to an Internet Gateway wi
 Most defaults can be changed in variables.tf
 
 **VPC CIDR** = "10.10.0.0/20"
+
 variable "vpc_cidr"
 
 #### PUBLIC SUBNET DEFAULTS
 
 [ "10.10.1.0/25", "10.10.3.0/25" ]
+
 variable "public_cidr"
+
 variable "public_subnet_count"
 
 #### PRIVATE SUBNET DEFAULTS
 
 [ "10.10.2.0/25", "10.10.4.0/25" ]
+
 variable "private_cidr"
+
 variable "private_subnet_count"
 
 #### DATABASE SUBNET DEFAULTS
 
 [ "10.10.10.0/25", "10.10.11.0/25" ]
+
 variable "database_cidr"
+
 variable "database_subnet_count"
