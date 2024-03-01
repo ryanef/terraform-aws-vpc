@@ -13,7 +13,7 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  count = var.public_subnet_count
+  count = length(var.public_cidr)
   vpc_id                  = aws_vpc.this.id
   map_public_ip_on_launch = var.public_subnet_ip_on_launch
   cidr_block              = var.public_cidr[count.index]
@@ -25,7 +25,7 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-count = var.private_subnet_count
+  count = length(var.private_cidr)
   vpc_id                  = aws_vpc.this.id
   map_public_ip_on_launch = false
   cidr_block              = var.private_cidr[count.index]
@@ -35,8 +35,9 @@ count = var.private_subnet_count
     Environment = "${var.vpc_tag}_${var.environment}"
   }
 }
+
 resource "aws_subnet" "database_subnet" {
-  count = var.database_subnet_count
+  count = length(var.database_cidr)
   vpc_id                  = aws_vpc.this.id
   map_public_ip_on_launch = false
   cidr_block              = var.database_cidr[count.index]
