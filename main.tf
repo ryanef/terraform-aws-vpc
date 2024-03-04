@@ -7,7 +7,7 @@ resource "aws_vpc" "this" {
   enable_network_address_usage_metrics = var.enable_network_address_usage_metrics
 
   tags = {
-    Name = var.vpc_tag
+    Name = "${var.vpc_tag}-${var.environment}"
   }
 
 }
