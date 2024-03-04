@@ -13,6 +13,7 @@ variable "access_ip" {
 
 variable "aws_region" {
   default = "us-east-1"
+  type = string
 }
 
 variable "az_exclude_names" {
@@ -27,10 +28,6 @@ variable "create_db_subnet_group" {
   description = "set to True for RDS subnet groups"
 }
 
-variable "database_subnet_count" {
-  type    = number
-  default = 2
-}
 
 variable "database_cidr" {
   type        = list(string)
@@ -47,10 +44,12 @@ variable "enable_dns_hostnames" {
   type    = bool
   default = true
 }
+
 variable "enable_dns_support" {
   type    = bool
   default = true
 }
+
 variable "enable_network_address_usage_metrics" {
   type    = bool
   default = false
@@ -79,15 +78,6 @@ variable "public_subnet_ip_on_launch" {
   default = true
 }
 
-variable "public_subnet_count" {
-  type    = number
-  default = 2
-}
-
-variable "private_subnet_count" {
-  type    = number
-  default = 2
-}
 
 variable "subnet_group_name" {
   default = "sngname"
@@ -106,5 +96,5 @@ variable "vpc_cidr" {
 variable "vpc_tag" {
   type        = string
   description = "Descriptive VPC tag"
-  default     = "FEBVPC"
+  default     = "MYVPC"
 }

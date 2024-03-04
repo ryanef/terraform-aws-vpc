@@ -20,7 +20,7 @@ resource "aws_subnet" "public_subnet" {
   availability_zone       = local.az[count.index]
 
   tags = {
-    Name = "${var.vpc_tag}_public_sn_${var.environment}"
+    Name = "${var.vpc_tag}-${var.environment}-public-sn"
   }
 }
 
@@ -31,8 +31,8 @@ resource "aws_subnet" "private_subnet" {
   cidr_block              = var.private_cidr[count.index]
   availability_zone       = local.az[count.index]
   tags = {
-    Name        = "${var.vpc_tag}_private_sn_${var.environment}"
-    Environment = "${var.vpc_tag}_${var.environment}"
+    Name        = "${var.vpc_tag}-${var.environment}-private-sn"
+    Environment = "${var.vpc_tag}-${var.environment}"
   }
 }
 
@@ -43,8 +43,8 @@ resource "aws_subnet" "database_subnet" {
   cidr_block              = var.database_cidr[count.index]
   availability_zone       = local.az[count.index]
   tags = {
-    Name        = "${var.vpc_tag}_${var.environment}"
-    Environment = "${var.vpc_tag}_${var.environment}"
+    Name        = "${var.vpc_tag}-${var.environment}-database-sn"
+    Environment = "${var.vpc_tag}-${var.environment}"
   }
 }
 
@@ -53,7 +53,7 @@ resource "aws_db_subnet_group" "rds_subnetgroup" {
   name       = var.subnet_group_name
   subnet_ids = aws_subnet.database_subnet.*.id
   tags = {
-    Name        = var.subnet_group_tag
+    Name        = "${var.vpc_tag}-${var.environment}-sng"
     Environment = "${var.environment}"
   }
 }
@@ -62,8 +62,8 @@ resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name        = "igw"
-    Environment = "${var.vpc_tag}_${var.environment}"
+    Name        = "${var.vpc_tag}-${var.environment}-igw"
+    Environment = "${var.vpc_tag}-${var.environment}"
   }
 }
 
@@ -71,8 +71,8 @@ resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name        = "${var.vpc_tag}_public_route_table"
-    Environment = "${var.environment}"
+    Name        = "${var.vpc_tag}-${var.environment}-public_route-table"
+    Environment = "${var.vpc_tag}-${var.environment}"
   }
 }
 
@@ -88,13 +88,13 @@ resource "aws_default_route_table" "private_rt" {
   default_route_table_id = aws_vpc.this.default_route_table_id
 
   tags = {
-    Name        = "${var.vpc_tag}_private_route_table"
+    Name        = "${var.vpc_tag}-private-route-table"
     Environment = "${var.environment}"
   }
 }
 
 resource "aws_route_table_association" "public_assoc" {
-  count          = var.public_subnet_count
+  count          = length(var.public_cidr)
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
@@ -110,5 +110,10 @@ resource "aws_security_group" "default" {
     self        = true
     from_port   = 22
     to_port     = 22
+  }
+
+    tags = {
+    Name        = "${var.vpc_tag}-${var.environment}-sg"
+    Environment = "${var.environment}"
   }
 }
