@@ -12,7 +12,7 @@ variable "access_ip" {
 
 variable "aws_region" {
   default = "us-east-1"
-  type = string
+  type    = string
 }
 
 variable "az_exclude_names" {

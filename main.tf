@@ -12,7 +12,7 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  count = length(var.public_cidr)
+  count                   = length(var.public_cidr)
   vpc_id                  = aws_vpc.this.id
   map_public_ip_on_launch = var.public_subnet_ip_on_launch
   cidr_block              = var.public_cidr[count.index]
@@ -24,7 +24,7 @@ resource "aws_subnet" "public_subnet" {
 }
 
 resource "aws_subnet" "private_subnet" {
-  count = length(var.private_cidr)
+  count                   = length(var.private_cidr)
   vpc_id                  = aws_vpc.this.id
   map_public_ip_on_launch = false
   cidr_block              = var.private_cidr[count.index]
@@ -36,7 +36,7 @@ resource "aws_subnet" "private_subnet" {
 }
 
 resource "aws_subnet" "database_subnet" {
-  count = length(var.database_cidr)
+  count                   = length(var.database_cidr)
   vpc_id                  = aws_vpc.this.id
   map_public_ip_on_launch = false
   cidr_block              = var.database_cidr[count.index]
@@ -75,7 +75,6 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-
 resource "aws_route" "default_route" {
   route_table_id         = aws_route_table.public_rt.id
   destination_cidr_block = "0.0.0.0/0"
@@ -100,8 +99,8 @@ resource "aws_route_table_association" "public_assoc" {
 
 resource "aws_security_group" "default" {
   description = "${var.vpc_name} security group"
-  name = "${var.vpc_name}-ssh"
-  vpc_id = aws_vpc.this.id
+  name        = "${var.vpc_name}-ssh"
+  vpc_id      = aws_vpc.this.id
 
   ingress {
     protocol    = "tcp"
@@ -111,7 +110,7 @@ resource "aws_security_group" "default" {
     to_port     = 22
   }
 
-    tags = {
+  tags = {
     Name        = "${var.vpc_name}-${var.environment}-sg"
     Environment = "${var.environment}"
   }
