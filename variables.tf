@@ -10,7 +10,6 @@ variable "access_ip" {
   type        = list(string)
 }
 
-
 variable "aws_region" {
   default = "us-east-1"
   type = string
@@ -93,8 +92,8 @@ variable "vpc_cidr" {
   default = "10.10.0.0/20"
 }
 
-variable "vpc_tag" {
+variable "vpc_name" {
   type        = string
   description = "Descriptive VPC tag"
-  default     = "MYVPC"
+  default     = "TF_VPC"
 }
