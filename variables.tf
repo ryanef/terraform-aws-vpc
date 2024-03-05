@@ -79,12 +79,12 @@ variable "public_subnet_ip_on_launch" {
 
 
 variable "subnet_group_name" {
-  default = "sngname"
+  default = "subnetgname"
   type    = string
 }
 
 variable "subnet_group_tag" {
-  default = "tfsng"
+  default = "tf_subnetgroup"
   type    = string
 }
 
