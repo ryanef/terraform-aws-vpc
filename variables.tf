@@ -8,6 +8,7 @@ variable "access_ip" {
   default     = null
   description = "Takes a list of string if you have multiple IPs you want to add. Use a /32 CIDR with your IP. example: ['75.177.160.130/32']"
   type        = list(string)
+  sensitive = true
 }
 
 variable "aws_region" {
