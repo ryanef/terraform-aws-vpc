@@ -1,12 +1,12 @@
 variable "add_access_ip" {
   default     = false
   type        = bool
-  description = "If you want to add a personal IP for SSH access. "
+  description = "true - if you want to add a personal IP to the VPC security group for SSH access."
 }
 
 variable "access_ip" {
   default     = null
-  description = "Should be formatted like '75.177.160.130/32' if your own IP"
+  description = "Takes a list of string if you have multiple IPs you want to add. Use a /32 CIDR with your IP. example: ['75.177.160.130/32']"
   type        = list(string)
 }
 
@@ -18,8 +18,27 @@ variable "aws_region" {
 variable "az_exclude_names" {
   type        = list(string)
   default     = ["us-east-1e"]
-  description = "Exclude AZs if they don't have required services available. Potentially useful if an AZ isn't compatible with certain tiers of EC2 Instances or other issues"
+  description = "Exclude AZs if they don't have required services available. Potentially useful if an AZ isn't compatible with what you're doing."
 }
+
+variable "count_database_cidrs" {
+  type        = list(string)
+  default     = ["10.10.10.0/25", "10.10.11.0/25"]
+  description = "Examples using default VPC CIDR: ['10.10.10.0/25', '10.10.11.0/25']"
+}
+
+variable "count_public_cidrs" {
+  type        = list(string)
+  default     = ["10.10.1.0/25", "10.10.3.0/25"]
+  description = "Examples using default VPC CIDR: ['10.10.1.0/25', '10.10.3.0/25']"
+}
+
+variable "count_private_cidrs" {
+  type        = list(string)
+  default     = ["10.10.2.0/25", "10.10.4.0/25"]
+  description = "Examples using default VPC CIDR: ['10.10.2.0/25'] "
+}
+
 
 variable "create_db_subnet_group" {
   default     = false
@@ -28,11 +47,6 @@ variable "create_db_subnet_group" {
 }
 
 
-variable "database_cidr" {
-  type        = list(string)
-  default     = ["10.10.10.0/25", "10.10.11.0/25"]
-  description = "Examples using default VPC CIDR: '10.10.3.0/25'. Can use these in a list of strings depending on how you decide to iterate over them."
-}
 
 variable "environment" {
   default = "dev"
@@ -59,27 +73,13 @@ variable "instance_tenancy" {
   default = "default"
 }
 
-variable "public_cidr" {
-  type        = list(string)
-  default     = ["10.10.1.0/25", "10.10.3.0/25"]
-  description = "Examples using default VPC CIDR: '10.10.1.0/25'. Can use these in a list of strings depending on how you decide to iterate over them."
-}
-
-variable "private_cidr" {
-  type        = list(string)
-  default     = ["10.10.2.0/25", "10.10.4.0/25"]
-  description = "Examples using default VPC CIDR: '10.10.2.0/25'. Can use these in a list of strings depending on how you decide to iterate over them."
-
-}
-
 variable "public_subnet_ip_on_launch" {
   type    = bool
   default = true
 }
 
-
 variable "subnet_group_name" {
-  default = "subnetgname"
+  default = "tf-subnetgroup"
   type    = string
 }
 
