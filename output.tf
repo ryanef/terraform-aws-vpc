@@ -1,7 +1,12 @@
 output "vpc_id" {
   value = aws_vpc.this.id
 }
-
+output "nat_gw"  {
+  value = aws_nat_gateway.this[0].id
+}
+output "elastic_ip"{
+  value = aws_eip.this[0].id
+}
 output "azs" {
   value = [data.aws_availability_zones.available.names]
 }
