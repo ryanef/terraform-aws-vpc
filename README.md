@@ -8,6 +8,16 @@ SSH at port 22 is enabled in the security group but you will need to change `add
 
 For routing, there is a public route table that points to an `Internet Gateway` with a `0.0.0.0/0` CIDR block. The private route table is the VPC's default route table which is private by default.
 
+### INTERNET ACCESS
+
+By default an Internet Gateway is created so anything you create in a public subnet will be able to reach that through settings in the route table.
+
+`NAT Gateway` is optional and remember there is a charge if not on free tier. You can enable NAT at the `use_nat_gateway` option in *variables.tf* which will also create an Elastic IP.
+
+`VPC Endpoints` are optional and can be changed at `use_nat_gateway` in the *variables.tf* file as well. You will have to specify [Endpoint policies(AWS Docs)](https://docs.aws.amazon.com/vpc/latest/privatelink/vpc-endpoints-access.html#default-endpoint-policy) manually because the default grants full access. Documentation shows the default endpoint policy and examples.
+
+A VPC Endpoint can either be a `Gateway Endpoint` or `Interface Endpoint` you can see an example in the bottom of *variables.tf*. Also keep in mind VPC Endpoints can cost money like NAT Gatway. Both are options for getting internet traffic to a private resource.
+
 ## Changing Defaults
 
 Most defaults can be changed in `variables.tf`
