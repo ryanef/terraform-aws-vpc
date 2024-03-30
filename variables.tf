@@ -88,6 +88,10 @@ variable "subnet_group_tag" {
   type    = string
 }
 
+variable "use_endpoints" {
+  type = bool
+  default = true
+}
 variable "vpc_cidr" {
   default = "10.10.0.0/20"
 }
@@ -95,5 +99,38 @@ variable "vpc_cidr" {
 variable "vpc_name" {
   type        = string
   description = "Descriptive VPC tag"
-  default     = "TF_VPC"
+  default     = "TFtest_VPC"
 }
+variable "vpc_endpoint" {
+  default = {}
+}
+variable "vpc_endpoint_policies"{
+  default = {}
+}
+
+# locals {
+#   ep = {
+#     "s3endpoint"={
+#       vpc_id=aws_vpc.this.id
+#       service_name="com.amazonaws.us-east-1.s3"
+#       ip_address_type=null
+#       vpc_endpoint_type="Gateway"
+#       route_table_ids=[aws_default_route_table.private_rt.id]
+#       private_dns_enabled=true
+#       # dns_record_ip_type=null
+#       # private_dns_only_for_inbound_resolver_endpoint=null
+#       subnet_ids=[aws_subnet.private_subnet.*.id]
+#       security_group_ids=null
+#     }
+#   }
+
+  # policies = {
+  #   "s3endpoint" = {
+  #     vpc_endpoint_id=aws_vpc_endpoint.this["s3endpoint"].id
+  #     effect = "Allow"
+  #     principal = "*"
+  #     action = ["s3:*"]
+  #     resource = "*"
+  #   }
+  # }
+# }

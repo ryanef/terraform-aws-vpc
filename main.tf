@@ -94,7 +94,16 @@ resource "aws_route_table_association" "public_assoc" {
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
-
+resource "aws_route_table_association" "private_assoc" {
+  count          = length(var.count_private_cidrs)
+  subnet_id      = aws_subnet.private_subnet[count.index].id
+  route_table_id = aws_default_route_table.private_rt.id
+}
+resource "aws_route_table_association" "database_assoc" {
+  count          = length(var.count_database_cidrs)
+  subnet_id      = aws_subnet.database_subnet[count.index].id
+  route_table_id = aws_default_route_table.private_rt.id
+}
 resource "aws_security_group" "default" {
   description = "${var.vpc_name} security group"
   name        = "${var.vpc_name}-ssh"
@@ -108,8 +117,55 @@ resource "aws_security_group" "default" {
     to_port     = 22
   }
 
+  egress {
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    self        = true
+    from_port   = 0
+    to_port     = 0
+  }
+
   tags = {
     Name        = "${var.vpc_name}-${var.environment}-sg"
     Environment = "${var.environment}"
   }
 }
+
+resource "aws_vpc_endpoint" "this" {
+ for_each = var.use_endpoints ? {for k,v in var.vpc_endpoint  : k=>v} : {}
+ vpc_id = aws_vpc.this.id
+ service_name = each.value.service_name
+#  policy = each.value.policy
+ 
+ private_dns_enabled = each.value.private_dns_enabled
+ ip_address_type = each.value.ip_address_type
+
+#  dns_options {
+#   dns_record_ip_type =each.value.dns_record_ip_type
+#   private_dns_only_for_inbound_resolver_endpoint = each.value.private_dns_only_for_inbound_resolver_endpoint
+#  }
+ route_table_ids = each.value.route_table_ids
+ security_group_ids = each.value.security_group_ids
+ vpc_endpoint_type = each.value.vpc_endpoint_type
+}
+# resource "aws_vpc_endpoint_policy" "example" {
+#   for_each = var.use_endpoints ? {for k,v in local.policies  : k=>v} : {}
+#   vpc_endpoint_id = each.value.vpc_endpoint_id
+#   policy = jsonencode({
+#     "Version" : "2012-10-17",
+#     "Statement" : [
+#       {
+#         "Sid" : "AllowAll",
+#         "Effect" : each.value.effect,
+#         "Principal" : {
+#           "AWS" : "${each.value.principal}"
+#         },
+#         "Action" : [
+#           "${each.value.action}"
+#         ],
+#         "Resource" : "${each.value.resource}"
+#       }
+#     ]
+#   })
+#   depends_on = [ aws_vpc_endpoint.this ]
+# }
