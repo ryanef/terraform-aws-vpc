@@ -89,6 +89,23 @@ resource "aws_default_route_table" "private_rt" {
   }
 }
 
+resource "aws_eip" "this" {
+   count = var.use_nat_gateway ? 1 : 0
+  domain   = "vpc"
+}
+
+resource "aws_nat_gateway" "this" {
+  count = var.use_nat_gateway ? 1 : 0
+  allocation_id = aws_eip.this[0].id
+  subnet_id     = aws_subnet.public_subnet[0].id
+
+  tags = {
+    Name = "gw NAT"
+  }
+
+
+  depends_on = [aws_internet_gateway.internet_gateway]
+}
 resource "aws_route_table_association" "public_assoc" {
   count          = length(var.count_public_cidrs)
   subnet_id      = aws_subnet.public_subnet[count.index].id

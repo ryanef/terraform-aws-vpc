@@ -92,6 +92,12 @@ variable "use_endpoints" {
   type = bool
   default = true
 }
+variable "use_nat_gateway" {
+  default  = true
+  type = bool
+  
+}
+
 variable "vpc_cidr" {
   default = "10.10.0.0/20"
 }
@@ -111,16 +117,16 @@ variable "vpc_endpoint_policies"{
 # locals {
 #   ep = {
 #     "s3endpoint"={
-#       vpc_id=aws_vpc.this.id
-#       service_name="com.amazonaws.us-east-1.s3"
+#       dns_record_ip_type=null
 #       ip_address_type=null
-#       vpc_endpoint_type="Gateway"
-#       route_table_ids=[aws_default_route_table.private_rt.id]
 #       private_dns_enabled=true
-#       # dns_record_ip_type=null
-#       # private_dns_only_for_inbound_resolver_endpoint=null
+#       private_dns_only_for_inbound_resolver_endpoint=null
+#       route_table_ids=[aws_default_route_table.private_rt.id]
 #       subnet_ids=[aws_subnet.private_subnet.*.id]
 #       security_group_ids=null
+#       service_name="com.amazonaws.us-east-1.s3"
+#       vpc_endpoint_type="Gateway"
+#       vpc_id=aws_vpc.this.id
 #     }
 #   }
 
