@@ -89,7 +89,7 @@ variable "subnet_group_tag" {
 }
 
 variable "use_endpoints" {
-  type = bool
+  
   default = true
 }
 
