@@ -7,7 +7,7 @@ resource "aws_vpc" "this" {
   enable_network_address_usage_metrics = var.enable_network_address_usage_metrics
 
   tags = {
-    Name = "${var.vpc_name}-${var.environment}"
+    Name = "${local.name_prefix}"
   }
 }
 
@@ -19,7 +19,7 @@ resource "aws_subnet" "public_subnet" {
   availability_zone       = local.az[count.index]
 
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-public-sn"
+    Name = "${local.name_prefix}-public-sn"
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_subnet" "private_subnet" {
   cidr_block              = var.count_private_cidrs[count.index]
   availability_zone       = local.az[count.index]
   tags = {
-    Name        = "${var.vpc_name}-${var.environment}-private-sn"
+    Name        = "${local.name_prefix}-private-sn"
   }
 }
 
@@ -41,7 +41,7 @@ resource "aws_subnet" "database_subnet" {
   cidr_block              = var.count_database_cidrs[count.index]
   availability_zone       = local.az[count.index]
   tags = {
-    Name        = "${var.vpc_name}-${var.environment}-database-sn"
+    Name        = "${local.name_prefix}-database-sn"
 
   }
 }
@@ -51,8 +51,8 @@ resource "aws_db_subnet_group" "rds_subnetgroup" {
   name       = var.subnet_group_name
   subnet_ids = aws_subnet.database_subnet.*.id
   tags = {
-    Name        = "${var.vpc_name}-${var.environment}-sng"
-    Environment = "${var.environment}"
+    Name        = "${local.name_prefix}-sng"
+    Environment = "${local.name_prefix}"
   }
 }
 
@@ -60,8 +60,8 @@ resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name        = "${var.vpc_name}-${var.environment}-igw"
-    Environment = "${var.vpc_name}-${var.environment}"
+    Name        = "${local.name_prefix}-igw"
+    Environment = "${local.name_prefix}"
   }
 }
 
@@ -69,8 +69,8 @@ resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name        = "${var.vpc_name}-${var.environment}-public-route-table"
-    Environment = "${var.vpc_name}-${var.environment}"
+    Name        = "${local.name_prefix}-public-route-table"
+    Environment = "${local.name_prefix}"
   }
 }
 
@@ -143,7 +143,7 @@ resource "aws_security_group" "default" {
   }
 
   tags = {
-    Name        = "${var.vpc_name}-${var.environment}-sg"
+    Name        = "${local.name_prefix}-sg"
     Environment = "${var.environment}"
   }
 }
@@ -165,6 +165,7 @@ resource "aws_vpc_endpoint" "this" {
  security_group_ids = each.value.security_group_ids
  vpc_endpoint_type = each.value.vpc_endpoint_type
 }
+
 # resource "aws_vpc_endpoint_policy" "example" {
 #   for_each = var.use_endpoints ? {for k,v in local.policies  : k=>v} : {}
 #   vpc_endpoint_id = each.value.vpc_endpoint_id

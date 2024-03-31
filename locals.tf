@@ -1,4 +1,5 @@
 locals {
+  name_prefix = "${var.vpc_name}-${var.environment}"
   az = data.aws_availability_zones.available.names
 
 
