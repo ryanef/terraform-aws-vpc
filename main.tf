@@ -144,7 +144,7 @@ resource "aws_security_group" "default" {
 
   tags = {
     Name        = "${local.name_prefix}-sg"
-    Environment = "${var.environment}"
+   
   }
 }
 
@@ -165,6 +165,7 @@ resource "aws_vpc_endpoint" "this" {
  security_group_ids =each.value.security_group_ids
  subnet_ids = each.value.subnet_ids
  vpc_endpoint_type = each.value.vpc_endpoint_type
+
  tags = {
    Name =  "${local.name_prefix}-${each.key}"
  }
