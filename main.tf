@@ -169,6 +169,7 @@ resource "aws_vpc_endpoint" "this" {
  tags = {
    Name =  "${local.name_prefix}-${each.key}"
  }
+
 }
 
 # resource "aws_vpc_endpoint_policy" "example" {
