@@ -149,7 +149,7 @@ resource "aws_security_group" "default" {
 }
 
 resource "aws_vpc_endpoint" "this" {
- for_each = var.use_endpoints ? {for k,v in var.vpc_endpoint  : k=>v} : {}
+  for_each = var.use_endpoints ? {for k, v in var.vpc_endpoint : k => v} : var.vpc_endpoint
  vpc_id = aws_vpc.this.id
  service_name = each.value.service_name
 #  policy = each.value.policy
@@ -162,9 +162,12 @@ resource "aws_vpc_endpoint" "this" {
 #   private_dns_only_for_inbound_resolver_endpoint = each.value.private_dns_only_for_inbound_resolver_endpoint
 #  }
  route_table_ids = each.value.route_table_ids
- security_group_ids = each.value.security_group_ids
+ security_group_ids =each.value.security_group_ids
  subnet_ids = each.value.subnet_ids
  vpc_endpoint_type = each.value.vpc_endpoint_type
+ tags = {
+   Name =  "${local.name_prefix}-${each.key}"
+ }
 }
 
 # resource "aws_vpc_endpoint_policy" "example" {
