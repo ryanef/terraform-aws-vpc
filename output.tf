@@ -2,10 +2,10 @@ output "vpc_id" {
   value = aws_vpc.this.id
 }
 output "nat_gw"  {
-  value = aws_nat_gateway.this[0].id
+  value = try(aws_nat_gateway.this[0].id, null)
 }
 output "elastic_ip"{
-  value = aws_eip.this[0].id
+  value = try(aws_eip.this[0].id,null)
 }
 output "azs" {
   value = [data.aws_availability_zones.available.names]

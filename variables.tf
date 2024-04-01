@@ -90,11 +90,11 @@ variable "subnet_group_tag" {
 
 variable "use_endpoints" {
   type = bool
-  default = true
+  default = false
 }
 
 variable "use_nat_gateway" {
-  default  = true
+  default  = false
   type = bool
 
 }

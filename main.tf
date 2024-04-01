@@ -88,9 +88,14 @@ resource "aws_default_route_table" "private_rt" {
     Name        = "${var.vpc_name}-private-route-table"
   }
 }
-
+resource "aws_route" "nat" {
+  count= var.use_nat_gateway ? 1 : 0
+  route_table_id              = aws_default_route_table.private_rt.id
+  destination_ipv6_cidr_block = "::/0"
+  nat_gateway_id = aws_nat_gateway.this[0].id
+}
 resource "aws_eip" "this" {
-   count = var.use_nat_gateway ? 1 : 0
+  count = var.use_nat_gateway ? 1 : 0
   domain   = "vpc"
 }
 
@@ -102,15 +107,15 @@ resource "aws_nat_gateway" "this" {
   tags = {
     Name = "gw NAT"
   }
-
-
   depends_on = [aws_internet_gateway.internet_gateway]
 }
+
 resource "aws_route_table_association" "public_assoc" {
   count          = length(var.count_public_cidrs)
   subnet_id      = aws_subnet.public_subnet[count.index].id
   route_table_id = aws_route_table.public_rt.id
 }
+
 resource "aws_route_table_association" "private_assoc" {
   count          = length(var.count_private_cidrs)
   subnet_id      = aws_subnet.private_subnet[count.index].id
@@ -121,6 +126,7 @@ resource "aws_route_table_association" "database_assoc" {
   subnet_id      = aws_subnet.database_subnet[count.index].id
   route_table_id = aws_default_route_table.private_rt.id
 }
+
 resource "aws_security_group" "default" {
   description = "${var.vpc_name} security group"
   name        = "${var.vpc_name}-ssh"
@@ -169,6 +175,7 @@ resource "aws_vpc_endpoint" "this" {
  tags = {
    Name =  "${local.name_prefix}-${each.key}"
  }
+
 }
 
 # resource "aws_vpc_endpoint_policy" "example" {
