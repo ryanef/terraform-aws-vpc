@@ -91,7 +91,9 @@ resource "aws_default_route_table" "private_rt" {
 resource "aws_route" "nat" {
   count= var.use_nat_gateway ? 1 : 0
   route_table_id              = aws_default_route_table.private_rt.id
-  destination_ipv6_cidr_block = "0.0.0.0/0"
+  
+  destination_cidr_block = "0.0.0.0/0"
+
   nat_gateway_id = aws_nat_gateway.this[0].id
 }
 resource "aws_eip" "this" {
