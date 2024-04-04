@@ -32,6 +32,9 @@ output "igw" {
 output "public_rt" {
   value = aws_route_table.public_rt.id
 }
+output "private_rt" {
+  value = aws_default_route_table.private_rt.id
+}
 
 output "vpc_security_group" {
   value = aws_security_group.default.id
