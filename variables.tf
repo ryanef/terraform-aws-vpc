@@ -96,7 +96,6 @@ variable "use_endpoints" {
 variable "use_nat_gateway" {
   default  = false
   type = bool
-
 }
 
 variable "vpc_cidr" {
@@ -106,7 +105,7 @@ variable "vpc_cidr" {
 variable "vpc_name" {
   type        = string
   description = "Descriptive VPC tag"
-  default     = "TFtest_VPC"
+  default     = "TF_VPC"
 }
 variable "vpc_endpoint" {
   default = {}
