@@ -158,7 +158,6 @@ resource "aws_security_group" "default" {
   egress {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    self        = true
     from_port   = 0
     to_port     = 0
   }
