@@ -131,7 +131,7 @@ resource "aws_route_table_association" "database_assoc" {
 
 resource "aws_security_group" "default" {
   description = "${var.vpc_name} security group"
-  name        = "${var.vpc_name}-ssh"
+  name        = "${var.vpc_name}-default"
   vpc_id      = aws_vpc.this.id
 
   ingress {
@@ -142,6 +142,19 @@ resource "aws_security_group" "default" {
     to_port     = 22
   }
 
+  ingress {
+    protocol = "-1"
+    from_port = 0
+    to_port = 0
+    cidr_blocks = ["${var.vpc_cidr}"]
+  }
+
+  egress {
+    protocol = "-1"
+    from_port = 0
+    to_port = 0
+    cidr_blocks = ["${var.vpc_cidr}"]
+  }
   egress {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
