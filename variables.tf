@@ -67,7 +67,10 @@ variable "enable_network_address_usage_metrics" {
   type    = bool
   default = false
 }
-
+variable "enable_vpc_flow_logs" {
+  default = true
+  type = bool
+}
 variable "instance_tenancy" {
   type    = string
   default = "default"
