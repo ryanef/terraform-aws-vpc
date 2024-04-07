@@ -108,27 +108,57 @@ variable "vpc_name" {
   default     = "TF_VPC"
 }
 variable "vpc_endpoint" {
-  default = {}
+  default = null
+  type = map(object({
+      assign_public_ip=bool
+      cluster_id=string
+      container_name=string
+      container_port=number
+      namespace_arn=string
+      image = string
+      service_name = string
+      subnet_ids = list(string)
+      target_group_arn=string
+      use_endpoints = bool
+      use_nat_gateway = bool
+      vpc_name = string
+      vpc_id = string   
+  }))
 }
 variable "vpc_endpoint_policies"{
-  default = {}
+  default = null
 }
 
-# locals {
-#   ep = {
-#     "s3endpoint"={
-#       dns_record_ip_type=null
-#       ip_address_type=null
-#       private_dns_enabled=true
-#       private_dns_only_for_inbound_resolver_endpoint=null
-#       route_table_ids=[aws_default_route_table.private_rt.id]
-#       subnet_ids=[aws_subnet.private_subnet.*.id]
-#       security_group_ids=null
-#       service_name="com.amazonaws.us-east-1.s3"
-#       vpc_endpoint_type="Gateway"
-#       vpc_id=aws_vpc.this.id
-#     }
-#   }
+locals {
+  ep = {
+    "s3endpoint"={
+      dns_record_ip_type=null
+      ip_address_type=null
+      private_dns_enabled=false
+      private_dns_only_for_inbound_resolver_endpoint=null
+      route_table_ids=[aws_default_route_table.private_rt.id]
+      subnet_ids=null
+      security_group_ids=null
+      service_name="com.amazonaws.us-east-1.s3"
+      vpc_endpoint_type="Gateway"
+      vpc_id=aws_vpc.this.id
+    }
+
+    "ecrapi"={
+      dns_record_ip_type=null
+      ip_address_type="ipv4"
+      private_dns_enabled=true
+      private_dns_only_for_inbound_resolver_endpoint=null
+      route_table_ids=null
+      subnet_ids=aws_subnet.private_subnet.*.id
+      security_group_ids=[aws_security_group.default.id]
+      service_name="com.amazonaws.us-east-1.ecr.api"
+      vpc_endpoint_type="Interface"
+      vpc_id=aws_vpc.this.id
+    }
+
+  }
+  }
 
   # policies = {
   #   "s3endpoint" = {
