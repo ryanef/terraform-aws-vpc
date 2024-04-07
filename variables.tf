@@ -110,21 +110,19 @@ variable "vpc_name" {
 variable "vpc_endpoint" {
   default = null
   type = map(object({
-      assign_public_ip=bool
-      cluster_id=string
-      container_name=string
-      container_port=number
-      namespace_arn=string
-      image = string
-      service_name = string
-      subnet_ids = list(string)
-      target_group_arn=string
-      use_endpoints = bool
-      use_nat_gateway = bool
-      vpc_name = string
-      vpc_id = string   
-  }))
+      dns_record_ip_type=any
+      ip_address_type=string
+      private_dns_enabled=bool
+      private_dns_only_for_inbound_resolver_endpoint=any
+      route_table_ids=list(string)
+      subnet_ids=list(string)
+      security_group_ids=list(string)
+      service_name=string
+      vpc_endpoint_type=string
+      vpc_id=string 
+}))
 }
+
 variable "vpc_endpoint_policies"{
   default = null
 }
