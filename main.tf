@@ -162,6 +162,27 @@ resource "aws_security_group" "default" {
   }
 }
 
+resource "aws_flow_log" "this" {
+  iam_role_arn    = aws_iam_role.flowrole.arn
+  log_destination = aws_cloudwatch_log_group.flow.arn
+  traffic_type    = "ALL"
+  vpc_id          = aws_vpc.this.id
+}
+
+resource "aws_cloudwatch_log_group" "flow" {
+  name = "${var.vpc_name}-${var.environment}-flow-logs"
+}
+resource "aws_iam_role" "flowrole" {
+  name               = "${var.vpc_name}-${var.environment}-flow-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+
+resource "aws_iam_role_policy" "flowpolicy" {
+  name   = "${var.vpc_name}-${var.environment}-flow-policy"
+  role   = aws_iam_role.flowrole.id
+  policy = data.aws_iam_policy_document.cwlogs.json
+}
 resource "aws_vpc_endpoint" "this" {
   for_each = var.vpc_endpoint !=null ? {for k, v in var.vpc_endpoint : k => v} : {}
  vpc_id = aws_vpc.this.id
