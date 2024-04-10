@@ -6,12 +6,12 @@ See the [Application Loadbalancer](https://registry.terraform.io/modules/ryanef/
 
 ## QUICK START
 
-No inputs required unless you want to change defaults. This will create a VPC named `TF_VPC` in `us-east-1`.
+No inputs required unless you want to change defaults. This will create a VPC named `TF_VPC` in `us-east-1`. The module is hosted on a public Terraform registry so put this in a `main.tf` file and run `terraform init`
 
 ```bash
 module "vpc" {
   source  = "ryanef/vpc/aws"
-  version = "1.2.2"
+  version = "1.3.2"
 }
 ```
 
@@ -25,9 +25,9 @@ By default an Internet Gateway is created so anything you create in a public sub
 
 `NAT Gateway` is optional, you can enable NAT at the `use_nat_gateway` option in *variables.tf* which will also create an Elastic IP.
 
-`VPC Endpoints` are optional and can be changed at `use_nat_gateway` in the *variables.tf* file as well. 
+`VPC Endpoints` are optional and can be changed at `use_vpc_endpoints` in the *variables.tf* file
 
-A VPC Endpoint can either be a `Gateway Endpoint` or `Interface Endpoint` you can see an example in the bottom of *variables.tf*. Also keep in mind VPC Endpoints can cost money like NAT Gatway. Both are options for getting internet traffic to your resources running in private subnets.
+A VPC Endpoint can either be a `Gateway Endpoint` or `Interface Endpoint` you can see an example in the bottom of *variables.tf*. Also keep in mind VPC Endpoints can cost money like NAT Gateway. Both are options for getting internet traffic to your resources running in private subnets.
 
 ## Changing Defaults
 
@@ -49,7 +49,7 @@ The subnets are using `/25` which give a total of 32 possible subnets.
 
 #### Number of subnets to create
 
-In `variables.tf` there are three variables to change. If you want to add more or less, just change the number of CIDRs in the list. I'll add a list of possible /25 subnets at the end of this section.
+In `variables.tf` there are three variables to change. If you want to add more or less subnets, just add a new CIDR like `10.10.8.0/25` to the list of public or private subnets. I'll add a list of possible compatible /25 subnets at the end of this section.
 
 ### PUBLIC SUBNET DEFAULTS
 
@@ -69,7 +69,7 @@ Defaults: `[ "10.10.10.0/25", "10.10.11.0/25" ]`
 
 variable `"count_database_cidrs"`
 
-I'm using /25 CIDRs which give a total of 32 possible subnets within the 10.10.0.0/20 range of the VPC. A [subnet calculator](https://www.site24x7.com/tools/ipv4-subnetcalculator.html) can help if you want to change this but here's a list of possible /25s you can use for public, private and database CIDR variables:
+With the `10.10.0.0/20` VPC CIDR, there are 32 possible subnets to use. This is a list of possible /25s you can use for public, private and database CIDR variables:
 
 "10.10.0.0/25", "10.10.0.128/25", "10.10.1.0/25", "10.10.1.128/25", "10.10.2.0/25", "10.10.2.128/25", "10.10.3.0/25", "10.10.3.128/25", "10.10.4.0/25", "10.10.4.128/25", "10.10.5.0/25", "10.10.5.128/25", "10.10.6.0/25", "10.10.6.128/25", "10.10.7.0/25", "10.10.7.128/25", "10.10.8.0/25", "10.10.8.128/25", "10.10.9.0/25", "10.10.9.128/25", "10.10.10.0/25", "10.10.10.128/25", "10.10.11.0/25", "10.10.11.128/25", "10.10.12.0/25", "10.10.12.128/25", "10.10.13.0/25", "10.10.13.128/25", "10.10.14.0/25", "10.10.14.128/25", "10.10.15.0/25", "10.10.15.128/25"
 
@@ -80,7 +80,7 @@ An example showing how to add extra public and private subnets with NAT Gateway 
 ```bash
 module "vpc" {
   source  = "ryanef/vpc/aws"
-  version = "1.2.2"
+  version = "1.3.2"
 
   count_public_cidrs = ["10.10.1.0/25", "10.10.3.0/25", "10.10.5.0/25", "10.10.7.0/25"]
 
