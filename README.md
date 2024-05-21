@@ -2,7 +2,7 @@
 
 This module is published on Terraform Registry and has default settings that create a VPC with 2 public subnets and 4 private subnets. NAT Gateway and VPC Endpoints are disabled by default but easily changed in `variables.tf`
 
-See the [Application Loadbalancer](https://registry.terraform.io/modules/ryanef/loadbalancer/aws/latest), <a href="https://registry.terraform.io/modules/ryanef/fargate/aws/latest" target="_blank">AWS Fargate</a> for deploying containerized applications with private networking using this VPC.
+See the [Application Loadbalancer](https://registry.terraform.io/modules/ryanef/loadbalancer/aws/latest), <a href="https://registry.terraform.io/modules/ryanef/fargate/aws/latest" target="_blank">AWS Fargate</a> modules for deploying containerized applications with private networking using this VPC.
 
 ## QUICK START
 
