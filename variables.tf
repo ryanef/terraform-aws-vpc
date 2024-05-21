@@ -91,11 +91,13 @@ variable "subnet_group_tag" {
 variable "use_endpoints" {
   type = bool
   default = false
+  description = "Enables VPC Endpoints"
 }
 
 variable "use_nat_gateway" {
   default  = false
   type = bool
+  description = "Enables NAT Gateway if you need private subnets to communicate with the public internet"
 }
 
 variable "vpc_cidr" {
