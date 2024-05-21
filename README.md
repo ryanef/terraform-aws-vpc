@@ -2,11 +2,11 @@
 
 This module is published on Terraform Registry and has default settings that create a VPC with 2 public subnets and 4 private subnets. NAT Gateway and VPC Endpoints are disabled by default but easily changed in `variables.tf`
 
-See the [Application Loadbalancer](https://registry.terraform.io/modules/ryanef/loadbalancer/aws/latest), ECS Fargate and EC2 modules if interested in deploying applications to this VPC.
+See the [Application Loadbalancer](https://registry.terraform.io/modules/ryanef/loadbalancer/aws/latest), <a href="https://registry.terraform.io/modules/ryanef/fargate/aws/latest" target="_blank">AWS Fargate</a> for deploying containerized applications with private networking using this VPC.
 
 ## QUICK START
 
-No inputs required unless you want to change defaults. This will create a VPC named `TF_VPC` in `us-east-1`. The module is hosted on a public Terraform registry so put this in a `main.tf` file and run `terraform init`
+No inputs required unless you want to change defaults. This will create a VPC named `TF_VPC` in `us-east-1`. The module is hosted on a public Terraform registry so all you have to do to get started is put this in a `main.tf` file and run `terraform init`
 
 ```bash
 module "vpc" {
@@ -15,13 +15,13 @@ module "vpc" {
 }
 ```
 
-An [example](#example-vpc) at the end of this README to show some common default configuration changes.
+An [example](#example-vpc) configuration using more options is at the end of this README
 
 ## NETWORKING DEFAULTS
 
 ### INTERNET ACCESS
 
-By default an Internet Gateway is created so anything you create in a public subnet will be able to reach that through settings in the route table.
+An Internet Gateway is created by default so anything you create in a public subnet will be able to reach that through settings in the route table.
 
 `NAT Gateway` is optional, you can enable NAT at the `use_nat_gateway` option in *variables.tf* which will also create an Elastic IP.
 
@@ -75,17 +75,20 @@ With the `10.10.0.0/20` VPC CIDR, there are 32 possible subnets to use. This is 
 
 ## Example VPC
 
-An example showing how to add extra public and private subnets with NAT Gateway enabled and specifying a custom name for your VPC Name and tags.
+An example showing NAT Gateway enabled,  custom VPC Name and tags. It also adds additional public and private subnets, if you want to add more, pick /25 CIDRs from the list above. The current 
 
 ```bash
 module "vpc" {
   source  = "ryanef/vpc/aws"
   version = "1.3.2"
 
+  # VPC CIDR
+  vpc_cidr = "10.10.0.0/20"
+  # public subnets
   count_public_cidrs = ["10.10.1.0/25", "10.10.3.0/25", "10.10.5.0/25", "10.10.7.0/25"]
-
+  # private subnets
   count_private_cidrs = ["10.10.2.0/25", "10.10.4.0/25", "10.10.5/0/25"]
-
+  # database subnets
   count_database_cidrs = ["10.10.10.0/25", "10.10.11.0/25"]
 
   environment = "production"
@@ -94,7 +97,7 @@ module "vpc" {
   use_vpc_endpoints = false
 
   vpc_name = "MyNewVPC"
-  vpc_cidr = "10.10.0.0/20"
+  
 }
 ```
 
